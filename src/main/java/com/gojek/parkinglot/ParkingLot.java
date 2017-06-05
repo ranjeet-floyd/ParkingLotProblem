@@ -1,7 +1,14 @@
 package com.gojek.parkinglot;
 
 import com.gojek.parkinglot.bean.CarInfo;
+import com.gojek.parkinglot.exception.NoSpaceException;
+import com.gojek.parkinglot.exception.NoSuchCarFoundException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Parking lot | Park car to nearest empty parking lot space.
@@ -10,12 +17,112 @@ import java.util.LinkedList;
  */
 public class ParkingLot {
 
+    private static final Map<String, ParkingLot> PARKING_LOOKUP = new HashMap<>();
     private final LinkedList<ParkingLot> adjacent = new LinkedList<>();
     private final int id;
-    private final CarInfo carInfo;
+    private CarInfo carInfo;
 
-    public ParkingLot(int _id) {
-        this.id = _id;
-        carInfo = null;
+    /**
+     * Init parking lot with carInfo null means empty. Each parking lot will
+     * have unique id.
+     *
+     * @param id
+     */
+    public ParkingLot(int id) {
+        this.id = id;
+        this.carInfo = null;
     }
+
+    /**
+     * Park car and return slot id.
+     *
+     * @param carInfo
+     * @return parking slot id
+     * @throws com.gojek.parkinglot.NoSpaceException : If no space left
+     */
+    public int park(CarInfo carInfo) throws NoSpaceException {
+        ParkingLot nextEmptyParkingLot = searchNextEmpty(this);
+        if (Objects.nonNull(nextEmptyParkingLot)) {
+            nextEmptyParkingLot.setCarInfo(carInfo);
+            PARKING_LOOKUP.put(carInfo.getRegistrationNumber(), nextEmptyParkingLot);
+            return nextEmptyParkingLot.getId();
+        }
+        throw new NoSpaceException("No space available for car : REG_NO:" + carInfo.getRegistrationNumber());
+
+    }
+
+    /**
+     * Remove car from parking slot if given carInfo is present.
+     *
+     * @param carInfo
+     * @throws com.gojek.parkinglot.exception.NoSuchCarFoundException
+     */
+    public void unPark(CarInfo carInfo) throws NoSuchCarFoundException {
+        ParkingLot parkedParkingLot = PARKING_LOOKUP.remove(carInfo.getRegistrationNumber());
+        if (Objects.isNull(parkedParkingLot)) {
+            throw new NoSuchCarFoundException("Provide car is not found : REG_NO :" + carInfo.getRegistrationNumber());
+        }
+
+    }
+
+    /**
+     * Search for next empty parking lot. If found return ParkingLot else null.
+     *
+     * @param fromEntryParking : nearest to entry.
+     * @return parkingLot if available
+     */
+    private ParkingLot searchNextEmpty(ParkingLot fromEntryParking) {
+
+        LinkedList<ParkingLot> nextToPark = new LinkedList<>();
+        Set<Integer> visited = new HashSet<>();
+        nextToPark.add(fromEntryParking); // search from root.
+
+        while (!nextToPark.isEmpty()) {
+
+            ParkingLot nextParking = nextToPark.remove();
+
+            //if  empty ..we have got parking slot
+            if (isEmpty(nextParking)) {
+                return nextParking;
+            }
+
+            if (visited.contains(nextParking.getId())) {
+                continue;//skip ..already checked
+            }
+
+            visited.add(nextParking.getId());
+
+            //add all adjacent to check if parking available
+            nextParking.adjacent.forEach((p) -> {
+                nextToPark.add(p);
+            });
+
+        }
+        return null; //no parking slot left
+
+    }
+
+    /**
+     * If Carinfo is null means parkingLot is empty /available.
+     *
+     * @param parking
+     * @return true if empty.
+     */
+    public boolean isEmpty(ParkingLot parking) {
+        return Objects.isNull(parking.getCarInfo());
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public CarInfo getCarInfo() {
+        return carInfo;
+    }
+
+    public void setCarInfo(CarInfo _carInfo) {
+        this.carInfo = _carInfo;
+    }
+
 }
