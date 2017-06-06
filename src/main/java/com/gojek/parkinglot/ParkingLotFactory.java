@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class ParkingLotFactory {
 
     //store parked car info
-    private final Map<Car, ParkingLot> parkingLotRepo;
+    private final Map<Integer, ParkingLot> parkingLotRepo;
     private final List<ParkingLot> parkingLots;
 
     private ParkingLotFactory(int numberOfParkingSlots) {
@@ -48,7 +48,7 @@ public class ParkingLotFactory {
                 .orElseThrow(() -> new NoSpaceException("No Space left for car :" + car.toString()));
         ParkingLot parkingLot = nextEmptyParkingLot.get();
         parkingLot.setParkedCar(car); //car car
-        parkingLotRepo.put(car, parkingLot);
+        parkingLotRepo.put(parkingLot.getId(), parkingLot);
         return slotId;
 
     }
@@ -56,18 +56,19 @@ public class ParkingLotFactory {
     /**
      * Remove car from parking slot if given carInfo is present.
      *
-     * @param car : car to removed
+     * @param slotId
      * @return parked lot id
      * @throws com.gojek.parkinglot.exception.NoSuchCarFoundException
      */
-    public int unPark(Car car) throws NoSuchCarFoundException {
-        ParkingLot parkedParkingLot = parkingLotRepo.remove(car);
+    public Car unPark(int slotId) throws NoSuchCarFoundException {
+        ParkingLot parkedParkingLot = parkingLotRepo.remove(slotId);
         if (Objects.isNull(parkedParkingLot)) {
-            throw new NoSuchCarFoundException("Provide car is not found :" + car.toString());
+            throw new NoSuchCarFoundException("Provide car is not found @ SlotId :" + slotId);
         } else {
+            Car parkedCar = parkedParkingLot.getParkedCar();
             parkedParkingLot.setParkedCar(null); //remove car
+            return parkedCar;
         }
-        return parkedParkingLot.getId();
 
     }
 
@@ -80,9 +81,9 @@ public class ParkingLotFactory {
     public List<String> registrationNumbersOfColor(String color) {
         return this.parkingLotRepo.entrySet()
                 .stream()
-                .filter(car -> car.getKey().getColor()
-                .equalsIgnoreCase(color))
-                .map(p -> p.getKey().getRegistrationNumber())
+                .map(m -> m.getValue().getParkedCar())
+                .filter(car -> car.getColor().equalsIgnoreCase(color))
+                .map(car -> car.getRegistrationNumber())
                 .collect(Collectors.toList());
 
     }
@@ -97,9 +98,10 @@ public class ParkingLotFactory {
     public int slotsOfCarRegistrationNumber(String registrationNo) throws NoSuchCarFoundException {
         List<Integer> slots = this.parkingLotRepo.entrySet()
                 .stream()
-                .filter(car -> car.getKey().getRegistrationNumber()
+                .map(m -> m.getValue())
+                .filter(p -> p.getParkedCar().getRegistrationNumber()
                 .equalsIgnoreCase(registrationNo))
-                .map(p -> p.getValue().getId())
+                .map(p -> p.getId())
                 .collect(Collectors.toList());
 
         if (slots.size() == 1) {
@@ -116,7 +118,7 @@ public class ParkingLotFactory {
     }
 
     /**
-     * Slot numbers of all slots where a car of a particular colour is parked.
+     * All slots where a car of a particular colour is parked.
      *
      * @param color
      * @return slot ids for car color
@@ -124,9 +126,10 @@ public class ParkingLotFactory {
     public List<Integer> slotsOfCarColor(String color) {
         return this.parkingLotRepo.entrySet()
                 .stream()
-                .filter(car -> car.getKey().getColor()
+                .map(m -> m.getValue())
+                .filter(p -> p.getParkedCar().getColor()
                 .equalsIgnoreCase(color))
-                .map(p -> p.getValue().getId())
+                .map(p -> p.getId())
                 .collect(Collectors.toList());
     }
 

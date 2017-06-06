@@ -94,8 +94,8 @@ public class ParkingLotFactoryNGTest {
         Car car1 = new Car("White", "KA-01-HH-1234");
         ParkingLotFactory instance = ParkingLotFactory.initParkingLots(1);
         int result = instance.park(car1);
-        int parkedId = instance.unPark(car1);
-        assertEquals(parkedId, result);
+        Car parkedCar = instance.unPark(result);
+        assertEquals(car1, parkedCar);
     }
 
     /**
@@ -104,9 +104,8 @@ public class ParkingLotFactoryNGTest {
     @Test(expectedExceptions = NoSuchCarFoundException.class)
     public void testUnPark_NoSuchCarFoundException() throws NoSuchCarFoundException {
         System.out.println("com.gojek.parkinglot.ParkingLotAppNGTest.testUnPark_NoSuchCarFoundException()");
-        Car car1 = new Car("White", "KA-01-HH-xxxx");
         ParkingLotFactory instance = ParkingLotFactory.initParkingLots(1);
-        int parkedId = instance.unPark(car1);
+        Car parkedCar = instance.unPark(2);
     }
 
     /**
