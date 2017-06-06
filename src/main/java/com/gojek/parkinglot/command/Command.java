@@ -8,5 +8,5 @@ package com.gojek.parkinglot.command;
 @FunctionalInterface
 public interface Command {
 
-    public void apply();
+    public <T> T apply(String... values);
 }
