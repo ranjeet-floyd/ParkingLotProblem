@@ -4,6 +4,7 @@ import com.gojek.parkinglot.bean.Car;
 import com.gojek.parkinglot.exception.NoSpaceException;
 import com.gojek.parkinglot.exception.NoSuchCarFoundException;
 import static org.testng.AssertJUnit.assertEquals;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -32,19 +33,26 @@ public class ParkingLotNGTest {
 
     }
 
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        System.out.println("com.gojek.parkinglot.ParkingLotNGTest.tearDownClass()");
+        ParkingLot.getPARKING_LOOKUP().clear();
+    }
+
     /**
      * Park first car @ parking id : 1
      */
     @Test(priority = 1)
     public void testParkMyCar_AT_ID_1() throws Exception {
         Car carInfo = new Car("White", "KA-01-HH-1234");
+        System.out.println("com.gojek.parkinglot.ParkingLotNGTest.testParkMyCar_AT_ID_1()");
         System.out.println("park my car : " + carInfo.toString());
         int expResult = 1;
         int result = entryParking.park(carInfo);
         //check parking lot id
         assertEquals(result, expResult);
         //check parked car
-        assertEquals(entryParking.getCarInfo(), carInfo);
+        assertEquals(carInfo,entryParking.getCarInfo());
         //check is it empty.
         assertEquals(entryParking.isEmpty(entryParking), false);
     }
@@ -54,6 +62,7 @@ public class ParkingLotNGTest {
      */
     @Test(priority = 2)
     public void testUnParkFirstCar() throws Exception {
+        System.out.println("com.gojek.parkinglot.ParkingLotNGTest.testUnParkFirstCar()");
         Car carInfo = new Car("White", "KA-01-HH-1234");
         System.out.println("unPark first car : " + carInfo.toString());
         entryParking.unPark(carInfo);
@@ -67,6 +76,7 @@ public class ParkingLotNGTest {
      */
     @Test(priority = 3, expectedExceptions = NoSuchCarFoundException.class)
     public void testNoCarFoundException() throws Exception {
+        System.out.println("com.gojek.parkinglot.ParkingLotNGTest.testNoCarFoundException()");
         Car carInfo = new Car("White", "KA-01-HH-1234");
         System.out.println("car not found : " + carInfo.toString());
         entryParking.unPark(carInfo);
@@ -78,6 +88,7 @@ public class ParkingLotNGTest {
      */
     @Test(priority = 4)
     public void testForNextParkingLot() throws Exception {
+        System.out.println("com.gojek.parkinglot.ParkingLotNGTest.testForNextParkingLot()");
         Car car1 = new Car("White", "KA-01-HH-1234");
         Car car2 = new Car("White", "KA-01-HH-9999");
         Car car3 = new Car("Black", "KA-01-BB-0001");
@@ -108,6 +119,7 @@ public class ParkingLotNGTest {
      */
     @Test(priority = 5, expectedExceptions = NoSpaceException.class)
     public void testNoSpaceException() throws Exception {
+        System.out.println("com.gojek.parkinglot.ParkingLotNGTest.testNoSpaceException()");
         Car car4 = new Car("Blue", "KA-01-HH-2701");
         Car car5 = new Car("Black", "KA-01-HH-3141");
         Car car6 = new Car("Black", "KA-01-P-333");

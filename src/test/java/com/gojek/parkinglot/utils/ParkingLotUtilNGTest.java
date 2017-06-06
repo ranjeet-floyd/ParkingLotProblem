@@ -6,6 +6,7 @@ import com.gojek.parkinglot.exception.NoSuchCarFoundException;
 import static com.gojek.parkinglot.utils.ParkingLotUtil.PARKING_LOT_UTIL;
 import java.util.List;
 import static org.testng.AssertJUnit.assertEquals;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -20,6 +21,7 @@ public class ParkingLotUtilNGTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        System.out.println("com.gojek.parkinglot.utils.ParkingLotUtilNGTest.setUpClass()");
         ParkingLot entryParking = new ParkingLot(1);
         ParkingLot p2 = new ParkingLot(2);
         ParkingLot p3 = new ParkingLot(3);
@@ -49,12 +51,18 @@ public class ParkingLotUtilNGTest {
 
     }
 
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        System.out.println("com.gojek.parkinglot.utils.ParkingLotUtilNGTest.tearDownClass()");
+        ParkingLot.getPARKING_LOOKUP().clear();
+    }
+
     /**
      * Test of registrationNumbersOfColor method, of class ParkingLotUtil.
      */
     @Test
     public void testRegistrationNumbersOfColor() {
-        System.out.println("registrationNumbersOfColor");
+        System.out.println("com.gojek.parkinglot.utils.ParkingLotUtilNGTest.testRegistrationNumbersOfColor()");
         String color = "White";
         ParkingLotUtil instance = PARKING_LOT_UTIL;
         List<String> result = instance.registrationNumbersOfColor(color);
@@ -74,7 +82,7 @@ public class ParkingLotUtilNGTest {
      */
     @Test
     public void testSlotsOfCarRegistrationNumber() throws NoSuchCarFoundException {
-        System.out.println("slotsOfCarRegistrationNumber");
+        System.out.println("com.gojek.parkinglot.utils.ParkingLotUtilNGTest.testSlotsOfCarRegistrationNumber()");
         String registrationNo = "KA-01-BB-0001";
         ParkingLotUtil instance = PARKING_LOT_UTIL;
         int result = instance.slotsOfCarRegistrationNumber(registrationNo);
@@ -88,7 +96,7 @@ public class ParkingLotUtilNGTest {
      */
     @Test(expectedExceptions = NoSuchCarFoundException.class)
     public void testSlotsOfCarRegistrationNumber_NoSuchCarFoundException() throws NoSuchCarFoundException {
-        System.out.println("slotsOfCarRegistrationNumber");
+        System.out.println("com.gojek.parkinglot.utils.ParkingLotUtilNGTest.testSlotsOfCarRegistrationNumber_NoSuchCarFoundException()");
         String registrationNo = "KA-01-BB-XXXX";
         ParkingLotUtil instance = PARKING_LOT_UTIL;
         int result = instance.slotsOfCarRegistrationNumber(registrationNo);
@@ -99,7 +107,7 @@ public class ParkingLotUtilNGTest {
      */
     @Test
     public void testSlotsOfCarColor() {
-        System.out.println("slotsOfCarColor");
+        System.out.println("com.gojek.parkinglot.utils.ParkingLotUtilNGTest.testSlotsOfCarColor()");
         String color = "Blue";
         ParkingLotUtil instance = PARKING_LOT_UTIL;
         List<Integer> result = instance.slotsOfCarColor(color);

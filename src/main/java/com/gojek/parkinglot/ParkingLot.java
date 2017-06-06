@@ -58,7 +58,7 @@ public class ParkingLot {
      * @throws com.gojek.parkinglot.exception.NoSuchCarFoundException
      */
     public void unPark(Car carInfo) throws NoSuchCarFoundException {
-        ParkingLot parkedParkingLot = PARKING_LOOKUP.remove(carInfo.getRegistrationNumber());
+        ParkingLot parkedParkingLot = PARKING_LOOKUP.remove(carInfo);
         if (Objects.isNull(parkedParkingLot)) {
             throw new NoSuchCarFoundException("Provide car is not found : REG_NO :" + carInfo.getRegistrationNumber());
         } else {
