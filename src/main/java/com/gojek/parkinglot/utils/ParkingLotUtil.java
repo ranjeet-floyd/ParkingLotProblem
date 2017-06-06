@@ -1,6 +1,7 @@
 package com.gojek.parkinglot.utils;
 
 import com.gojek.parkinglot.ParkingLot;
+import com.gojek.parkinglot.exception.NoSuchCarFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
  */
 public class ParkingLotUtil {
 
-    private static final ParkingLotUtil PARKING_LOT_UTIL = new ParkingLotUtil();
+    public static final ParkingLotUtil PARKING_LOT_UTIL = new ParkingLotUtil();
 
     private ParkingLotUtil() {
     }
@@ -38,13 +39,25 @@ public class ParkingLotUtil {
      * @param registrationNo
      * @return slot ids for car registration number
      */
-    public List<Integer> slotsOfCarRegistrationNumber(String registrationNo) {
-        return ParkingLot.getPARKING_LOOKUP().entrySet()
+    public int slotsOfCarRegistrationNumber(String registrationNo) throws NoSuchCarFoundException {
+        List<Integer> slots = ParkingLot.getPARKING_LOOKUP().entrySet()
                 .stream()
                 .filter(car -> car.getKey().getRegistrationNumber()
                 .equalsIgnoreCase(registrationNo))
                 .map(p -> p.getValue().getId())
                 .collect(Collectors.toList());
+
+        if (slots.size() == 1) {
+
+            return slots.get(0);
+        }
+
+        if (slots.isEmpty()) {
+            throw new NoSuchCarFoundException("No car found with regis No:" + registrationNo);
+        }
+
+        throw new RuntimeException("Something wrong |Multiple car found for regis No: " + registrationNo);
+
     }
 
     /**
