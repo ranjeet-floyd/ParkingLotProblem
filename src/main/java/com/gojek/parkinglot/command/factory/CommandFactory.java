@@ -5,6 +5,7 @@ import com.gojek.parkinglot.command.Command;
 import com.gojek.parkinglot.command.CreateParkingLotCommand;
 import com.gojek.parkinglot.command.LeaveCommand;
 import com.gojek.parkinglot.command.ParkCommand;
+import com.gojek.parkinglot.command.RegNumsForCarsWithColourCommand;
 import com.gojek.parkinglot.command.StatusCommand;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -44,6 +45,8 @@ public class CommandFactory {
         cf.addCommand("park", new ParkCommand());
         cf.addCommand("leave", new LeaveCommand());
         cf.addCommand("status", new StatusCommand());
+        cf.addCommand("registration_numbers_for_cars_with_colour", new RegNumsForCarsWithColourCommand());
+
         return cf;
     }
 
@@ -53,8 +56,10 @@ public class CommandFactory {
         ParkingLotFactory parkingLotFactory = cf.executeCommand("create_parking_lot", "6");
         cf.executeCommand("park", parkingLotFactory, "KA-01-HH-1234", "White");
         cf.executeCommand("park", parkingLotFactory, "KA-01-HH-1235", "White");
+        cf.executeCommand("park", parkingLotFactory, "KA-01-HH-1236", "White");
 //        cf.executeCommand("leave", parkingLotFactory,"1");
-        cf.executeCommand("status",parkingLotFactory);
+        cf.executeCommand("status", parkingLotFactory);
+        cf.executeCommand("registration_numbers_for_cars_with_colour", parkingLotFactory, "White");
     }
 
 }
