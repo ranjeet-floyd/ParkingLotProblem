@@ -17,7 +17,7 @@ public class ParkCommand implements Command {
     }
 
     @Override
-    public Object apply(Object... values) {
+    public Object apply(String... values) {
 
         StringBuilder builder = new StringBuilder();
         if (values.length != 2) {
@@ -26,8 +26,8 @@ public class ParkCommand implements Command {
         }
 
         try {
-            String regNo = (String) values[0];
-            String color = (String) values[1];
+            String regNo =  values[0];
+            String color =  values[1];
             int slotId = parkingLotFactory.getParkingLot().park(new Car(color, regNo));
             builder.append("Allocated slot number: ");
             builder.append(slotId);

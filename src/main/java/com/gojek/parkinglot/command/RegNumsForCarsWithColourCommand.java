@@ -16,14 +16,14 @@ public class RegNumsForCarsWithColourCommand implements Command {
     }
 
     @Override
-    public Object apply(Object... values) {
+    public Object apply(String... values) {
         StringBuilder builder = new StringBuilder();
         if (values.length != 1) {
             builder.append("array len 1  and must contains vehicle color");
             return builder.toString();
         }
 
-        String color = values[0].toString();
+        String color = values[0];
         List<String> regisNums = parkingLotFactory.getParkingLot().registrationNumbersOfColor(color);
         builder.append(String.join(", ", regisNums));
         return builder.toString();

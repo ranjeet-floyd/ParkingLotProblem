@@ -29,10 +29,10 @@ public class CommandFactory {
         commands.put(name, command);
     }
 
-    public void executeCommand(Object... command) {
-        if (commands.containsKey((String) command[0])) {
-            Object[] values = Arrays.copyOfRange(command, 1, command.length);
-            Object object = commands.get((String) command[0]).apply(values);
+    public void executeCommand(String... command) {
+        if (commands.containsKey(command[0])) {
+            String[] values = Arrays.copyOfRange(command, 1, command.length);
+            Object object = commands.get(command[0]).apply(values);
             System.out.println(object.toString());
         } else {
             System.out.println("Operation not supported :" + command[0]);

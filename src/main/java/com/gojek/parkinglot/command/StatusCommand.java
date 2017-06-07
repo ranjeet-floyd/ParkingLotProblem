@@ -17,7 +17,7 @@ public class StatusCommand implements Command {
     }
 
     @Override
-    public Object apply(Object... values) {
+    public Object apply(String... values) {
         StringBuilder builder = new StringBuilder();
         Map<Integer, ParkingLot> parkingLotRepo = parkingLotFactory.getParkingLot().status();
         builder.append("Slot No. Registration No Colour");

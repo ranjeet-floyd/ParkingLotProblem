@@ -16,14 +16,14 @@ public class SlotNumForRegisNumberCommand implements Command {
     }
 
     @Override
-    public Object apply(Object... values) {
+    public Object apply(String... values) {
         StringBuilder builder = new StringBuilder();
         if (values.length != 1) {
             builder.append("array len 1  and must contains regisNumber");
             return builder.toString();
         }
         try {
-            String regisNumber = values[0].toString();
+            String regisNumber = values[0];
             int slotId = parkingLotFactory.getParkingLot().slotsOfCarRegistrationNumber(regisNumber);
             builder.append(slotId);
 

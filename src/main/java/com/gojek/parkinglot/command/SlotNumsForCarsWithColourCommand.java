@@ -17,13 +17,13 @@ public class SlotNumsForCarsWithColourCommand implements Command {
     }
 
     @Override
-    public Object apply(Object... values) {
+    public Object apply(String... values) {
         StringBuilder builder = new StringBuilder();
         if (values.length != 1) {
             builder.append("array len 1  and must contains color");
             return builder.toString();
         }
-        String color = values[0].toString();
+        String color = values[0];
         List<Integer> slotIds = parkingLotFactory.getParkingLot().slotsOfCarColor(color);
         List<String> strSlotIds = slotIds.stream()
                 .map(i -> i.toString())

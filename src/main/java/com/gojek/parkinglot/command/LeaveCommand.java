@@ -16,7 +16,7 @@ public class LeaveCommand implements Command {
     }
 
     @Override
-    public Object apply(Object... values) {
+    public Object apply(String... values) {
         StringBuilder builder = new StringBuilder();
         if (values.length != 1) {
             builder.append("str array should contain parkingLotFactory, int SlotId");
@@ -24,7 +24,7 @@ public class LeaveCommand implements Command {
         }
 
         try {
-            int slotId = Integer.parseInt(values[0].toString());
+            int slotId = Integer.parseInt(values[0]);
             parkingLotFactory.getParkingLot().unPark(slotId);
             builder.append("Slot number ");
             builder.append(slotId);
