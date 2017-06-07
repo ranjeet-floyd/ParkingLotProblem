@@ -5,7 +5,6 @@ import com.gojek.parkinglot.bean.Vehicle;
 import com.gojek.parkinglot.dao.ParkingLotDao;
 import com.gojek.parkinglot.exception.NoSpaceException;
 import com.gojek.parkinglot.exception.NoSuchCarFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -19,20 +18,14 @@ import java.util.stream.Collectors;
  */
 public class ParkingLotBl {
 
-    private final List<ParkingLot> parkingLots;
     private final ParkingLotDao parkingLotDao;
 
-    public ParkingLotBl( ParkingLotDao parkingLotDao) {
-        this.parkingLots = new ArrayList<>();
+    public ParkingLotBl(ParkingLotDao parkingLotDao) {
         this.parkingLotDao = parkingLotDao;
     }
 
     public void initParkingLots(int numberOfParkingSlots) {
-        parkingLots.clear();
-        parkingLotDao.clear();
-        for (int i = 0; i < numberOfParkingSlots; i++) {
-            this.parkingLots.add(new ParkingLot(i + 1));
-        }
+        parkingLotDao.createSlots(numberOfParkingSlots);
     }
 
     /**
@@ -142,13 +135,7 @@ public class ParkingLotBl {
      * @return parkingLot if available
      */
     private Optional<ParkingLot> searchNextEmpty() throws NoSpaceException {
-        return this.parkingLots.stream()
-                .filter(this::isEmpty)
-                .findFirst();
-    }
-
-    private boolean isEmpty(ParkingLot parkingLot) {
-        return Objects.isNull(parkingLot.getVehicle());
+        return parkingLotDao.searchNextEmpty();
     }
 
     /**
