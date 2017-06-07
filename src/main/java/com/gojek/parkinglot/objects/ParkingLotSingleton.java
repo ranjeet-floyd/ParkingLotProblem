@@ -1,7 +1,7 @@
-package com.gojek.parkinglot;
+package com.gojek.parkinglot.objects;
 
-import com.gojek.parkinglot.bean.Car;
 import com.gojek.parkinglot.bean.ParkingLot;
+import com.gojek.parkinglot.bean.Vehicle;
 import com.gojek.parkinglot.exception.NoSpaceException;
 import com.gojek.parkinglot.exception.NoSuchCarFoundException;
 import java.util.ArrayList;
@@ -16,38 +16,43 @@ import java.util.stream.Collectors;
  *
  * @author ranjeet
  */
-public class ParkingLotFactory {
+public class ParkingLotSingleton {
 
-    //store parked car info
+    //store parked vehicle info
     private final Map<Integer, ParkingLot> parkingLotRepo;
     private final List<ParkingLot> parkingLots;
 
-    private ParkingLotFactory(int numberOfParkingSlots) {
-        this.parkingLotRepo = new HashMap<>(numberOfParkingSlots);
-        this.parkingLots = new ArrayList<>(numberOfParkingSlots);
+    private static final ParkingLotSingleton PARKING_LOT_SINGLETON = new ParkingLotSingleton();
+
+    private ParkingLotSingleton() {
+        this.parkingLotRepo = new HashMap<>();
+        this.parkingLots = new ArrayList<>();
     }
 
-    public static ParkingLotFactory initParkingLots(int numberOfParkingSlots) {
-        final ParkingLotFactory parkingLotFactory = new ParkingLotFactory(numberOfParkingSlots);
+    public static ParkingLotSingleton getInstance() {
+        return PARKING_LOT_SINGLETON;
+
+    }
+
+    public void initParkingLots(int numberOfParkingSlots) {
         for (int i = 0; i < numberOfParkingSlots; i++) {
-            parkingLotFactory.parkingLots.add(new ParkingLot(i + 1));
+            PARKING_LOT_SINGLETON.parkingLots.add(new ParkingLot(i + 1));
         }
-        return parkingLotFactory;
     }
 
     /**
      * Park car and return slot id.
      *
-     * @param car
+     * @param vehicle
      * @return parking slot id
      * @throws com.gojek.parkinglot.NoSpaceException : If no space left
      */
-    public int park(Car car) throws NoSpaceException {
+    public int park(Vehicle vehicle) throws NoSpaceException {
         Optional<ParkingLot> nextEmptyParkingLot = searchNextEmpty();
         int slotId = nextEmptyParkingLot.map(c -> c.getId())
-                .orElseThrow(() -> new NoSpaceException("No Space left for car :" + car.toString()));
+                .orElseThrow(() -> new NoSpaceException("No Space left for vehicle :" + vehicle.toString()));
         ParkingLot parkingLot = nextEmptyParkingLot.get();
-        parkingLot.setParkedCar(car); //car car
+        parkingLot.setParkedVehicle(vehicle); //park vehicle
         parkingLotRepo.put(parkingLot.getId(), parkingLot);
         return slotId;
 
@@ -60,14 +65,14 @@ public class ParkingLotFactory {
      * @return parked lot id
      * @throws com.gojek.parkinglot.exception.NoSuchCarFoundException
      */
-    public Car unPark(int slotId) throws NoSuchCarFoundException {
+    public Vehicle unPark(int slotId) throws NoSuchCarFoundException {
         ParkingLot parkedParkingLot = parkingLotRepo.remove(slotId);
         if (Objects.isNull(parkedParkingLot)) {
-            throw new NoSuchCarFoundException("Provide car is not found @ SlotId :" + slotId);
+            throw new NoSuchCarFoundException("Provide vehicle is not found @ SlotId :" + slotId);
         } else {
-            Car parkedCar = parkedParkingLot.getParkedCar();
-            parkedParkingLot.setParkedCar(null); //remove car
-            return parkedCar;
+            Vehicle parkedVehicle = parkedParkingLot.getVehicle();
+            parkedParkingLot.setParkedVehicle(null); //remove car
+            return parkedVehicle;
         }
 
     }
@@ -81,7 +86,7 @@ public class ParkingLotFactory {
     public List<String> registrationNumbersOfColor(String color) {
         return this.parkingLotRepo.entrySet()
                 .stream()
-                .map(m -> m.getValue().getParkedCar())
+                .map(m -> m.getValue().getVehicle())
                 .filter(car -> car.getColor().equalsIgnoreCase(color))
                 .map(car -> car.getRegistrationNumber())
                 .collect(Collectors.toList());
@@ -99,7 +104,7 @@ public class ParkingLotFactory {
         List<Integer> slots = this.parkingLotRepo.entrySet()
                 .stream()
                 .map(m -> m.getValue())
-                .filter(p -> p.getParkedCar().getRegistrationNumber()
+                .filter(p -> p.getVehicle().getRegistrationNumber()
                 .equalsIgnoreCase(registrationNo))
                 .map(p -> p.getId())
                 .collect(Collectors.toList());
@@ -127,7 +132,7 @@ public class ParkingLotFactory {
         return this.parkingLotRepo.entrySet()
                 .stream()
                 .map(m -> m.getValue())
-                .filter(p -> p.getParkedCar().getColor()
+                .filter(p -> p.getVehicle().getColor()
                 .equalsIgnoreCase(color))
                 .map(p -> p.getId())
                 .collect(Collectors.toList());
@@ -147,17 +152,15 @@ public class ParkingLotFactory {
     }
 
     private boolean isEmpty(ParkingLot parkingLot) {
-        return Objects.isNull(parkingLot.getParkedCar());
+        return Objects.isNull(parkingLot.getVehicle());
     }
 
     /**
      * Get the current status of parking lot | Display cars
+     *
+     * @return parkingLotRepo
      */
     public Map<Integer, ParkingLot> status() {
-//        this.parkingLotRepo.entrySet().forEach(s -> {
-//            System.out.println(s.getKey() + " : " + s.getValue());
-//        });
-
         return parkingLotRepo;
 
     }
