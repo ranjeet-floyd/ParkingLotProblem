@@ -1,2 +1,3 @@
 #!/bin/bash 
+mvn clean install
 java -cp target/ParkingLotCodingProblem-1.0.0.jar com.gojek.parkinglot.APP $1
