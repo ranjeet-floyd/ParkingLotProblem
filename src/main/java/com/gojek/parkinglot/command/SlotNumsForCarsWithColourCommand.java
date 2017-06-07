@@ -1,6 +1,6 @@
 package com.gojek.parkinglot.command;
 
-import com.gojek.parkinglot.ParkingLotFactory;
+import com.gojek.parkinglot.objects.ParkingLotSingleton;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,13 +10,18 @@ import java.util.stream.Collectors;
  */
 public class SlotNumsForCarsWithColourCommand implements Command {
 
+    private final ParkingLotSingleton parkingLotFactory;
+
+    public SlotNumsForCarsWithColourCommand() {
+        this.parkingLotFactory = ParkingLotSingleton.getInstance();
+    }
+
     @Override
     public <T> T apply(Object... values) {
-        if (values.length != 2 && values[0] instanceof ParkingLotFactory) {
-            throw new IllegalArgumentException("array len 2  and must contains parkingLotFactory obj");
+        if (values.length != 1) {
+            throw new IllegalArgumentException("array len 1  and must contains color");
         }
-        ParkingLotFactory parkingLotFactory = (ParkingLotFactory) values[0];
-        String color = values[1].toString();
+        String color = values[0].toString();
 
         List<Integer> slotIds = parkingLotFactory.slotsOfCarColor(color);
         List<String> strSlotIds = slotIds.stream()

@@ -1,6 +1,6 @@
 package com.gojek.parkinglot.command;
 
-import com.gojek.parkinglot.ParkingLotFactory;
+import com.gojek.parkinglot.objects.ParkingLotSingleton;
 
 /**
  *
@@ -8,16 +8,19 @@ import com.gojek.parkinglot.ParkingLotFactory;
  */
 public class CreateParkingLotCommand implements Command {
 
+    private final ParkingLotSingleton parkingLotFactory;
+
     public CreateParkingLotCommand() {
+        parkingLotFactory = ParkingLotSingleton.getInstance();
     }
 
     @Override
-    public ParkingLotFactory apply(Object... values) {
+    public ParkingLotSingleton apply(Object... values) {
         if (values.length != 1) {
             throw new IllegalArgumentException("str array should contain int numberOfSlot");
         }
         int numberOfSlot = Integer.parseInt(values[0].toString());
-        ParkingLotFactory parkingLotFactory = ParkingLotFactory.initParkingLots(numberOfSlot);
+        parkingLotFactory.initParkingLots(numberOfSlot);
         System.out.println("Created a parking lot with " + numberOfSlot + " slots");
         return parkingLotFactory;
 

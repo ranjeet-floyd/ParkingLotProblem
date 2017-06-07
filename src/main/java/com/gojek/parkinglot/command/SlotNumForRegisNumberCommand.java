@@ -1,6 +1,6 @@
 package com.gojek.parkinglot.command;
 
-import com.gojek.parkinglot.ParkingLotFactory;
+import com.gojek.parkinglot.objects.ParkingLotSingleton;
 import com.gojek.parkinglot.exception.NoSuchCarFoundException;
 
 /**
@@ -9,18 +9,20 @@ import com.gojek.parkinglot.exception.NoSuchCarFoundException;
  */
 public class SlotNumForRegisNumberCommand implements Command {
 
+    private final ParkingLotSingleton parkingLotFactory;
+
     public SlotNumForRegisNumberCommand() {
+        parkingLotFactory = ParkingLotSingleton.getInstance();
     }
 
     @Override
     public <T> T apply(Object... values) {
 
-        if (values.length != 2 && values[0] instanceof ParkingLotFactory) {
-            throw new IllegalArgumentException("array len 2  and must contains parkingLotFactory obj");
+        if (values.length != 1 ) {
+            throw new IllegalArgumentException("array len 1  and must contains regisNumber");
         }
         try {
-            ParkingLotFactory parkingLotFactory = (ParkingLotFactory) values[0];
-            String regisNumber = values[1].toString();
+            String regisNumber = values[0].toString();
 
             int slotId = parkingLotFactory.slotsOfCarRegistrationNumber(regisNumber);
             System.out.println(slotId);

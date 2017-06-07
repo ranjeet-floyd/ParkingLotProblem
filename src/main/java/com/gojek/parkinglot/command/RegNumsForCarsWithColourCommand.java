@@ -1,6 +1,6 @@
 package com.gojek.parkinglot.command;
 
-import com.gojek.parkinglot.ParkingLotFactory;
+import com.gojek.parkinglot.objects.ParkingLotSingleton;
 import java.util.List;
 
 /**
@@ -9,13 +9,19 @@ import java.util.List;
  */
 public class RegNumsForCarsWithColourCommand implements Command {
 
+    ParkingLotSingleton parkingLotFactory ;
+
+    public RegNumsForCarsWithColourCommand() {
+        this.parkingLotFactory = ParkingLotSingleton.getInstance();
+    }
+    
+    
     @Override
     public <T> T apply(Object... values)  {
-        if (values.length != 2 && values[0] instanceof ParkingLotFactory) {
+        if (values.length != 1 ) {
             throw new IllegalArgumentException("array len 2  and must contains parkingLotFactory obj");
         }
-        ParkingLotFactory parkingLotFactory = (ParkingLotFactory) values[0];
-        String color = values[1].toString();
+        String color = values[0].toString();
 
         List<String> regisNums = parkingLotFactory.registrationNumbersOfColor(color);
         System.out.println(String.join(", ", regisNums));
