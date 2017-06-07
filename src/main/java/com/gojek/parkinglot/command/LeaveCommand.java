@@ -1,7 +1,7 @@
 package com.gojek.parkinglot.command;
 
-import com.gojek.parkinglot.objects.ParkingLotSingleton;
 import com.gojek.parkinglot.exception.NoSuchCarFoundException;
+import com.gojek.parkinglot.objects.ParkingLotSingleton;
 
 /**
  *
@@ -11,7 +11,7 @@ public class LeaveCommand implements Command {
 
     private final ParkingLotSingleton parkingLotFactory;
     public LeaveCommand() {
-        parkingLotFactory = ParkingLotSingleton.getInstance();
+        parkingLotFactory = ParkingLotSingleton.INSTANCE;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class LeaveCommand implements Command {
         }
         try {
             int slotId = Integer.parseInt(values[0].toString());
-            parkingLotFactory.unPark(slotId);
+            parkingLotFactory.getParkingLot().unPark(slotId);
             System.out.println("Slot number " + slotId + " is free");
             
         } catch (NoSuchCarFoundException ex) {

@@ -13,7 +13,7 @@ public class SlotNumsForCarsWithColourCommand implements Command {
     private final ParkingLotSingleton parkingLotFactory;
 
     public SlotNumsForCarsWithColourCommand() {
-        this.parkingLotFactory = ParkingLotSingleton.getInstance();
+        this.parkingLotFactory = ParkingLotSingleton.INSTANCE;
     }
 
     @Override
@@ -23,7 +23,7 @@ public class SlotNumsForCarsWithColourCommand implements Command {
         }
         String color = values[0].toString();
 
-        List<Integer> slotIds = parkingLotFactory.slotsOfCarColor(color);
+        List<Integer> slotIds = parkingLotFactory.getParkingLot().slotsOfCarColor(color);
         List<String> strSlotIds = slotIds.stream()
                 .map(i -> i.toString())
                 .collect(Collectors.toList());

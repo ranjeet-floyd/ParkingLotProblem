@@ -1,8 +1,8 @@
 package com.gojek.parkinglot.command;
 
-import com.gojek.parkinglot.objects.ParkingLotSingleton;
 import com.gojek.parkinglot.bean.Car;
 import com.gojek.parkinglot.exception.NoSpaceException;
+import com.gojek.parkinglot.objects.ParkingLotSingleton;
 
 /**
  *
@@ -12,7 +12,7 @@ public class ParkCommand implements Command {
 
         private final ParkingLotSingleton parkingLotFactory;
     public ParkCommand() {
-        parkingLotFactory = ParkingLotSingleton.getInstance();
+        parkingLotFactory = ParkingLotSingleton.INSTANCE;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class ParkCommand implements Command {
         try {
             String regNo = (String) values[0];
             String color = (String) values[1];
-            int slotId = parkingLotFactory.park(new Car(color, regNo));
+            int slotId = parkingLotFactory.getParkingLot().park(new Car(color, regNo));
             System.out.println("Allocated slot number: " + slotId);
 
         } catch (NoSpaceException ex) {

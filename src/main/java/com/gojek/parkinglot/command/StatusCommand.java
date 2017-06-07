@@ -1,7 +1,7 @@
 package com.gojek.parkinglot.command;
 
-import com.gojek.parkinglot.objects.ParkingLotSingleton;
 import com.gojek.parkinglot.bean.ParkingLot;
+import com.gojek.parkinglot.objects.ParkingLotSingleton;
 import java.util.Map;
 
 /**
@@ -13,12 +13,12 @@ public class StatusCommand implements Command {
     private final ParkingLotSingleton parkingLotFactory;
 
     public StatusCommand() {
-        parkingLotFactory = ParkingLotSingleton.getInstance();
+        parkingLotFactory = ParkingLotSingleton.INSTANCE;
     }
 
     @Override
     public Object apply(Object... values) throws Exception {
-        Map<Integer, ParkingLot> parkingLotRepo = parkingLotFactory.status();
+        Map<Integer, ParkingLot> parkingLotRepo = parkingLotFactory.getParkingLot().status();
         System.out.println("Slot No. Registration No Colour");
         parkingLotRepo.entrySet().stream()
                 .map(s -> s.getValue())

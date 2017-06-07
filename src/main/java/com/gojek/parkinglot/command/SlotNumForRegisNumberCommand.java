@@ -1,7 +1,7 @@
 package com.gojek.parkinglot.command;
 
-import com.gojek.parkinglot.objects.ParkingLotSingleton;
 import com.gojek.parkinglot.exception.NoSuchCarFoundException;
+import com.gojek.parkinglot.objects.ParkingLotSingleton;
 
 /**
  *
@@ -12,7 +12,7 @@ public class SlotNumForRegisNumberCommand implements Command {
     private final ParkingLotSingleton parkingLotFactory;
 
     public SlotNumForRegisNumberCommand() {
-        parkingLotFactory = ParkingLotSingleton.getInstance();
+        parkingLotFactory = ParkingLotSingleton.INSTANCE;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class SlotNumForRegisNumberCommand implements Command {
         try {
             String regisNumber = values[0].toString();
 
-            int slotId = parkingLotFactory.slotsOfCarRegistrationNumber(regisNumber);
+            int slotId = parkingLotFactory.getParkingLot().slotsOfCarRegistrationNumber(regisNumber);
             System.out.println(slotId);
 
         } catch (NoSuchCarFoundException ex) {

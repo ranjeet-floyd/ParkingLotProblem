@@ -8,10 +8,10 @@ import com.gojek.parkinglot.objects.ParkingLotSingleton;
  */
 public class CreateParkingLotCommand implements Command {
 
-    private final ParkingLotSingleton parkingLotFactory;
+    private final ParkingLotSingleton parkingLotSingleton;
 
     public CreateParkingLotCommand() {
-        parkingLotFactory = ParkingLotSingleton.getInstance();
+        parkingLotSingleton = ParkingLotSingleton.INSTANCE;
     }
 
     @Override
@@ -20,9 +20,9 @@ public class CreateParkingLotCommand implements Command {
             throw new IllegalArgumentException("str array should contain int numberOfSlot");
         }
         int numberOfSlot = Integer.parseInt(values[0].toString());
-        parkingLotFactory.initParkingLots(numberOfSlot);
+        parkingLotSingleton.getParkingLot().initParkingLots(numberOfSlot);
         System.out.println("Created a parking lot with " + numberOfSlot + " slots");
-        return parkingLotFactory;
+        return parkingLotSingleton;
 
     }
 

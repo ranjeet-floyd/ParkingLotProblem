@@ -12,7 +12,7 @@ public class RegNumsForCarsWithColourCommand implements Command {
     ParkingLotSingleton parkingLotFactory ;
 
     public RegNumsForCarsWithColourCommand() {
-        this.parkingLotFactory = ParkingLotSingleton.getInstance();
+        this.parkingLotFactory = ParkingLotSingleton.INSTANCE;
     }
     
     
@@ -23,7 +23,7 @@ public class RegNumsForCarsWithColourCommand implements Command {
         }
         String color = values[0].toString();
 
-        List<String> regisNums = parkingLotFactory.registrationNumbersOfColor(color);
+        List<String> regisNums = parkingLotFactory.getParkingLot().registrationNumbersOfColor(color);
         System.out.println(String.join(", ", regisNums));
         return null;
     }
