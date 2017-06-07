@@ -5,8 +5,9 @@ package com.gojek.parkinglot.bean;
  * @author ranjeet
  */
 public class ParkingLot {
+
     private int id;
-    private Car parkedCar;
+    private Vehicle parkedCar;
 
     public ParkingLot(int id) {
         this.id = id;
@@ -21,12 +22,12 @@ public class ParkingLot {
         this.id = id;
     }
 
-    public Car getParkedCar() {
+    public Vehicle getVehicle() {
         return parkedCar;
     }
 
-    public void setParkedCar(Car parkedCar) {
-        this.parkedCar = parkedCar;
+    public void setParkedVehicle(Vehicle parkedVehicle) {
+        this.parkedCar = parkedVehicle;
     }
 
 }

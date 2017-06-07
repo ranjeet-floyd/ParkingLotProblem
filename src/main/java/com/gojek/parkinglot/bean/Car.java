@@ -7,7 +7,7 @@ import java.util.Objects;
  *
  * @author ranjeet
  */
-public class Car {
+public class Car extends Vehicle {
 
     private final String color;
     private final String registrationNumber;
@@ -17,10 +17,12 @@ public class Car {
         this.registrationNumber = registrationNumber;
     }
 
+    @Override
     public String getColor() {
         return color;
     }
 
+    @Override
     public String getRegistrationNumber() {
         return registrationNumber;
     }
@@ -51,7 +53,5 @@ public class Car {
         final Car other = (Car) obj;
         return this.registrationNumber.equalsIgnoreCase(other.registrationNumber);
     }
-    
-    
 
 }
