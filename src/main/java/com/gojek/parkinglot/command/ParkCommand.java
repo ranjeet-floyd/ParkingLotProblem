@@ -10,25 +10,26 @@ import com.gojek.parkinglot.exception.NoSpaceException;
  */
 public class ParkCommand implements Command {
 
-    private ParkingLotFactory parkingLotFactory;
-
-    public ParkCommand(ParkingLotFactory parkingLotFactory) {
-        this.parkingLotFactory = parkingLotFactory;
+    public ParkCommand() {
     }
 
     @Override
-    public Integer apply(String... values) {
-        if (values.length != 2) {
-            throw new IllegalArgumentException("str array should contain car reg and color");
+    public Object apply(Object... values) {
+
+        if (values.length != 3) {
+            throw new IllegalArgumentException("str array should contains parkingLotFactory obj, car reg and color");
         }
         try {
-            String regNo = values[0];
-            String color = values[1];
-            return this.parkingLotFactory.park(new Car(color, regNo));
+            ParkingLotFactory parkingLotFactory = (ParkingLotFactory) values[0];
+            String regNo = (String) values[1];
+            String color = (String) values[2];
+            int slotId = parkingLotFactory.park(new Car(color, regNo));
+            System.out.println("Allocated slot number: " + slotId);
+
         } catch (NoSpaceException ex) {
-            System.err.println(ex);
-            throw new RuntimeException("No Space left", ex);
+            System.out.println("Sorry, parking lot is full");
         }
+        return null;
     }
 
 }

@@ -1,7 +1,7 @@
 package com.gojek.parkinglot.command;
 
 import com.gojek.parkinglot.ParkingLotFactory;
-import com.gojek.parkinglot.bean.Car;
+import com.gojek.parkinglot.exception.NoSuchCarFoundException;
 
 /**
  *
@@ -9,20 +9,24 @@ import com.gojek.parkinglot.bean.Car;
  */
 public class LeaveCommand implements Command {
 
-    private ParkingLotFactory parkingLotFactory;
-
-    public LeaveCommand(ParkingLotFactory parkingLotFactory) {
-        this.parkingLotFactory = parkingLotFactory;
+    public LeaveCommand() {
     }
 
     @Override
-    public Car apply(String... values) {
-        if (values.length != 1) {
-            throw new IllegalArgumentException("str array should contain int Slot id");
-        }
-        int slotId = Integer.parseInt(values[0]);
-        return null;
-//        parkingLotFactory.unPark(null);
-    }
+    public Object apply(Object... values) {
 
+        if (values.length != 2) {
+            throw new IllegalArgumentException("str array should contain parkingLotFactory, int SlotId");
+        }
+        try {
+            ParkingLotFactory parkingLotFactory = (ParkingLotFactory) values[0];
+            int slotId = Integer.parseInt(values[1].toString());
+            parkingLotFactory.unPark(slotId);
+            System.out.println("Slot number " + slotId + " is free");
+            
+        } catch (NoSuchCarFoundException ex) {
+            System.out.println("Not found");
+        }
+        return null;
+    }
 }

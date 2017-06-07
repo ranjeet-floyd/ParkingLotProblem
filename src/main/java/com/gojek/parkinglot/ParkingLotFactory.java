@@ -118,7 +118,7 @@ public class ParkingLotFactory {
     }
 
     /**
-     * All slots where a car of a particular colour is parked.
+     * Slot numbers of all slots where a car of a particular colour is parked.
      *
      * @param color
      * @return slot ids for car color
@@ -148,6 +148,18 @@ public class ParkingLotFactory {
 
     private boolean isEmpty(ParkingLot parkingLot) {
         return Objects.isNull(parkingLot.getParkedCar());
+    }
+
+    /**
+     * Get the current status of parking lot | Display cars
+     */
+    public Map<Integer, ParkingLot> status() {
+//        this.parkingLotRepo.entrySet().forEach(s -> {
+//            System.out.println(s.getKey() + " : " + s.getValue());
+//        });
+
+        return parkingLotRepo;
+
     }
 
 }
