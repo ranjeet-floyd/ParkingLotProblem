@@ -35,6 +35,8 @@ public class ParkingLotSingleton {
     }
 
     public void initParkingLots(int numberOfParkingSlots) {
+        parkingLots.clear();
+        parkingLotRepo.clear();
         for (int i = 0; i < numberOfParkingSlots; i++) {
             PARKING_LOT_SINGLETON.parkingLots.add(new ParkingLot(i + 1));
         }

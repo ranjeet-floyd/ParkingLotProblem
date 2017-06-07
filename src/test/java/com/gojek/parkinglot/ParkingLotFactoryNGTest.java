@@ -24,11 +24,12 @@ public class ParkingLotFactoryNGTest {
     /**
      * Test of park method, of class ParkingLotSingleton.
      */
-    @Test
+    @Test(priority = 1)
     public void testPark_FirstCar() throws NoSpaceException {
         System.out.println("com.gojek.parkinglot.ParkingLotAppNGTest.testPark()");
         Vehicle car1 = new Car("White", "KA-01-HH-1234");
         int expResult = 1; //park at fi
+        PARKING_LOT_SINGLETON.initParkingLots(1);
         int result = PARKING_LOT_SINGLETON.park(car1);
         assertEquals(expResult, result);
     }
@@ -45,6 +46,7 @@ public class ParkingLotFactoryNGTest {
         Vehicle car4 = new Car("Blue", "KA-01-HH-2701");
         Vehicle car5 = new Car("Black", "KA-01-HH-3141");
         Vehicle car6 = new Car("Black", "KA-01-P-333");
+        PARKING_LOT_SINGLETON.initParkingLots(6);
         assertEquals(1, PARKING_LOT_SINGLETON.park(car1));
         assertEquals(2, PARKING_LOT_SINGLETON.park(car2));
         assertEquals(3, PARKING_LOT_SINGLETON.park(car3));
@@ -62,6 +64,7 @@ public class ParkingLotFactoryNGTest {
         System.out.println("com.gojek.parkinglot.ParkingLotAppNGTest.testPark_NoSpaceException()");
         Vehicle car1 = new Car("White", "KA-01-HH-1234");
         Vehicle car2 = new Car("White", "KA-01-HH-9999");
+        PARKING_LOT_SINGLETON.initParkingLots(1);
         assertEquals(1, PARKING_LOT_SINGLETON.park(car1));
         assertEquals(2, PARKING_LOT_SINGLETON.park(car2));
     }
@@ -73,6 +76,7 @@ public class ParkingLotFactoryNGTest {
     public void testUnPark() throws NoSuchCarFoundException, NoSpaceException {
         System.out.println("com.gojek.parkinglot.ParkingLotAppNGTest.testUnPark()");
         Vehicle car1 = new Car("White", "KA-01-HH-1234");
+        PARKING_LOT_SINGLETON.initParkingLots(1);
         int result = PARKING_LOT_SINGLETON.park(car1);
         Vehicle parkedCar = PARKING_LOT_SINGLETON.unPark(result);
         assertEquals(car1, parkedCar);
@@ -84,7 +88,8 @@ public class ParkingLotFactoryNGTest {
     @Test(expectedExceptions = NoSuchCarFoundException.class)
     public void testUnPark_NoSuchCarFoundException() throws NoSuchCarFoundException {
         System.out.println("com.gojek.parkinglot.ParkingLotAppNGTest.testUnPark_NoSuchCarFoundException()");
-       Vehicle  parkedCar = PARKING_LOT_SINGLETON.unPark(2);
+        PARKING_LOT_SINGLETON.initParkingLots(1);
+        Vehicle parkedCar = PARKING_LOT_SINGLETON.unPark(2);
     }
 
     /**
@@ -99,6 +104,7 @@ public class ParkingLotFactoryNGTest {
         Vehicle car4 = new Car("Blue", "KA-01-HH-2701");
         Vehicle car5 = new Car("Black", "KA-01-HH-3141");
         Vehicle car6 = new Car("Black", "KA-01-P-333");
+        PARKING_LOT_SINGLETON.initParkingLots(10);
         PARKING_LOT_SINGLETON.park(car1);
         PARKING_LOT_SINGLETON.park(car2);
         PARKING_LOT_SINGLETON.park(car3);
@@ -115,7 +121,8 @@ public class ParkingLotFactoryNGTest {
     }
 
     /**
-     * Test of slotsOfCarRegistrationNumber method, of class ParkingLotSingleton.
+     * Test of slotsOfCarRegistrationNumber method, of class
+     * ParkingLotSingleton.
      */
     @Test
     public void testSlotsOfCarRegistrationNumber() throws Exception {
@@ -126,6 +133,7 @@ public class ParkingLotFactoryNGTest {
         Vehicle car4 = new Car("Blue", "KA-01-HH-2701");
         Vehicle car5 = new Car("Black", "KA-01-HH-3141");
         Vehicle car6 = new Car("Black", "KA-01-P-333");
+        PARKING_LOT_SINGLETON.initParkingLots(10);
         PARKING_LOT_SINGLETON.park(car1);
         PARKING_LOT_SINGLETON.park(car2);
         PARKING_LOT_SINGLETON.park(car3); //parked @ 3
@@ -149,6 +157,7 @@ public class ParkingLotFactoryNGTest {
         Vehicle car4 = new Car("Blue", "KA-01-HH-2701");
         Vehicle car5 = new Car("Black", "KA-01-HH-3141");
         Vehicle car6 = new Car("Black", "KA-01-P-333");
+        PARKING_LOT_SINGLETON.initParkingLots(10);
         PARKING_LOT_SINGLETON.park(car1); //park @1
         PARKING_LOT_SINGLETON.park(car2);//park @2
         PARKING_LOT_SINGLETON.park(car3); ////park @3
