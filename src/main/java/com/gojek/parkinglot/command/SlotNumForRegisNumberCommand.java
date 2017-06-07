@@ -16,21 +16,21 @@ public class SlotNumForRegisNumberCommand implements Command {
     }
 
     @Override
-    public <T> T apply(Object... values) {
-
-        if (values.length != 1 ) {
-            throw new IllegalArgumentException("array len 1  and must contains regisNumber");
+    public Object apply(Object... values) {
+        StringBuilder builder = new StringBuilder();
+        if (values.length != 1) {
+            builder.append("array len 1  and must contains regisNumber");
+            return builder.toString();
         }
         try {
             String regisNumber = values[0].toString();
-
             int slotId = parkingLotFactory.getParkingLot().slotsOfCarRegistrationNumber(regisNumber);
-            System.out.println(slotId);
+            builder.append(slotId);
 
         } catch (NoSuchCarFoundException ex) {
-            System.out.println("Not found");
+            builder.append("Not found");
         }
-        return null;
+        return builder.toString();
     }
 
 }

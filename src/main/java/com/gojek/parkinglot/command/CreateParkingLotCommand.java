@@ -15,14 +15,19 @@ public class CreateParkingLotCommand implements Command {
     }
 
     @Override
-    public ParkingLotSingleton apply(Object... values) {
+    public Object apply(Object... values) {
+        StringBuilder builder = new StringBuilder();
         if (values.length != 1) {
-            throw new IllegalArgumentException("str array should contain int numberOfSlot");
+            builder.append("str array should contain int numberOfSlot");
+            return builder.toString();
         }
+
         int numberOfSlot = Integer.parseInt(values[0].toString());
         parkingLotSingleton.getParkingLot().initParkingLots(numberOfSlot);
-        System.out.println("Created a parking lot with " + numberOfSlot + " slots");
-        return parkingLotSingleton;
+        builder.append("Created a parking lot with ");
+        builder.append(numberOfSlot);
+        builder.append(" slots");
+        return builder.toString();
 
     }
 

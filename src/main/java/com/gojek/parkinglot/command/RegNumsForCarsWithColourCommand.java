@@ -9,23 +9,24 @@ import java.util.List;
  */
 public class RegNumsForCarsWithColourCommand implements Command {
 
-    ParkingLotSingleton parkingLotFactory ;
+    ParkingLotSingleton parkingLotFactory;
 
     public RegNumsForCarsWithColourCommand() {
         this.parkingLotFactory = ParkingLotSingleton.INSTANCE;
     }
-    
-    
-    @Override
-    public <T> T apply(Object... values)  {
-        if (values.length != 1 ) {
-            throw new IllegalArgumentException("array len 2  and must contains parkingLotFactory obj");
-        }
-        String color = values[0].toString();
 
+    @Override
+    public Object apply(Object... values) {
+        StringBuilder builder = new StringBuilder();
+        if (values.length != 1) {
+            builder.append("array len 1  and must contains vehicle color");
+            return builder.toString();
+        }
+
+        String color = values[0].toString();
         List<String> regisNums = parkingLotFactory.getParkingLot().registrationNumbersOfColor(color);
-        System.out.println(String.join(", ", regisNums));
-        return null;
+        builder.append(String.join(", ", regisNums));
+        return builder.toString();
     }
 
 }

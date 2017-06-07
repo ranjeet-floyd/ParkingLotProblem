@@ -10,24 +10,29 @@ import com.gojek.parkinglot.objects.ParkingLotSingleton;
 public class LeaveCommand implements Command {
 
     private final ParkingLotSingleton parkingLotFactory;
+
     public LeaveCommand() {
         parkingLotFactory = ParkingLotSingleton.INSTANCE;
     }
 
     @Override
     public Object apply(Object... values) {
-
+        StringBuilder builder = new StringBuilder();
         if (values.length != 1) {
-            throw new IllegalArgumentException("str array should contain parkingLotFactory, int SlotId");
+            builder.append("str array should contain parkingLotFactory, int SlotId");
+            return builder.toString();
         }
+
         try {
             int slotId = Integer.parseInt(values[0].toString());
             parkingLotFactory.getParkingLot().unPark(slotId);
-            System.out.println("Slot number " + slotId + " is free");
-            
+            builder.append("Slot number ");
+            builder.append(slotId);
+            builder.append(" is free");
+
         } catch (NoSuchCarFoundException ex) {
-            System.out.println("Not found");
+            builder.append("Not found");
         }
-        return null;
+        return builder.toString();
     }
 }

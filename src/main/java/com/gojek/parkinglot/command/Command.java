@@ -8,5 +8,5 @@ package com.gojek.parkinglot.command;
 @FunctionalInterface
 public interface Command {
 
-    public <T> T apply(Object... values) throws Exception;
+    public Object apply(Object... values);
 }

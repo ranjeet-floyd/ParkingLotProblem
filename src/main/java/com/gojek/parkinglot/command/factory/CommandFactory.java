@@ -29,12 +29,14 @@ public class CommandFactory {
         commands.put(name, command);
     }
 
-    public <T> T executeCommand(Object... command) throws Exception {
+    public void executeCommand(Object... command) {
         if (commands.containsKey((String) command[0])) {
             Object[] values = Arrays.copyOfRange(command, 1, command.length);
-            return commands.get((String) command[0]).apply(values);
+            Object object = commands.get((String) command[0]).apply(values);
+            System.out.println(object.toString());
+        } else {
+            System.out.println("Operation not supported :" + command[0]);
         }
-        throw new UnsupportedOperationException("Operation not supported :" + command[0]);
     }
 
     /* Factory pattern */

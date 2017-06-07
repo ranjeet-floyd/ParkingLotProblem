@@ -10,7 +10,8 @@ import com.gojek.parkinglot.objects.ParkingLotSingleton;
  */
 public class ParkCommand implements Command {
 
-        private final ParkingLotSingleton parkingLotFactory;
+    private final ParkingLotSingleton parkingLotFactory;
+
     public ParkCommand() {
         parkingLotFactory = ParkingLotSingleton.INSTANCE;
     }
@@ -18,19 +19,23 @@ public class ParkCommand implements Command {
     @Override
     public Object apply(Object... values) {
 
+        StringBuilder builder = new StringBuilder();
         if (values.length != 2) {
-            throw new IllegalArgumentException("str array should contains parkingLotFactory obj, car reg and color");
+            builder.append("str array should contains  car reg and color");
+            return builder.toString();
         }
+
         try {
             String regNo = (String) values[0];
             String color = (String) values[1];
             int slotId = parkingLotFactory.getParkingLot().park(new Car(color, regNo));
-            System.out.println("Allocated slot number: " + slotId);
+            builder.append("Allocated slot number: ");
+            builder.append(slotId);
 
         } catch (NoSpaceException ex) {
-            System.out.println("Sorry, parking lot is full");
+            builder.append("Sorry, parking lot is full");
         }
-        return null;
+        return builder.toString();
     }
 
 }

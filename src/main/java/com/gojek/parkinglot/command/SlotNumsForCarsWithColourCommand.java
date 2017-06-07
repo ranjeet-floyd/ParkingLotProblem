@@ -17,18 +17,19 @@ public class SlotNumsForCarsWithColourCommand implements Command {
     }
 
     @Override
-    public <T> T apply(Object... values) {
+    public Object apply(Object... values) {
+        StringBuilder builder = new StringBuilder();
         if (values.length != 1) {
-            throw new IllegalArgumentException("array len 1  and must contains color");
+            builder.append("array len 1  and must contains color");
+            return builder.toString();
         }
         String color = values[0].toString();
-
         List<Integer> slotIds = parkingLotFactory.getParkingLot().slotsOfCarColor(color);
         List<String> strSlotIds = slotIds.stream()
                 .map(i -> i.toString())
                 .collect(Collectors.toList());
-        System.out.println(String.join(", ", strSlotIds));
-        return null;
+        builder.append(String.join(", ", strSlotIds));
+        return builder.toString();
     }
 
 }

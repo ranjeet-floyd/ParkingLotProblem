@@ -17,17 +17,21 @@ public class StatusCommand implements Command {
     }
 
     @Override
-    public Object apply(Object... values) throws Exception {
+    public Object apply(Object... values) {
+        StringBuilder builder = new StringBuilder();
         Map<Integer, ParkingLot> parkingLotRepo = parkingLotFactory.getParkingLot().status();
-        System.out.println("Slot No. Registration No Colour");
+        builder.append("Slot No. Registration No Colour");
+        builder.append("\n");
+        
         parkingLotRepo.entrySet().stream()
                 .map(s -> s.getValue())
                 .forEach(p -> {
-                    System.out.print(String.format("%-9d", p.getId()));
-                    System.out.print(String.format("%8s", p.getVehicle().getRegistrationNumber()));
-                    System.out.println(String.format("%8s", p.getVehicle().getColor()));
+                    builder.append(String.format("%-9d", p.getId()));
+                    builder.append(String.format("%8s", p.getVehicle().getRegistrationNumber()));
+                    builder.append(String.format("%8s", p.getVehicle().getColor()));
+                    builder.append("\n");
                 });
-        return null;
+        return builder.toString();
     }
 
 }
